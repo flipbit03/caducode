@@ -11,11 +11,12 @@ The LLM becomes a code generator. Any task you request, the agent solves by writ
 ## Features
 
 - **Single tool simplicity**: One `run_python` tool handles everything
+- **Textual TUI**: Full terminal UI with scrollable history, resize support, and syntax highlighting
 - **Persistent execution environment**: Variables, imports, and definitions survive between calls
 - **Full Python access**: Filesystem, network, subprocess - no restrictions
 - **Self-correcting**: Exceptions are returned to the LLM for analysis and retry
-- **Token tracking**: Displays cumulative token usage across the session
-- **Rich terminal UI**: Colored, formatted output with timestamps
+- **Token tracking**: Live token counter in the input bar
+- **Fallback Rich CLI**: Simple mode for single prompts or piped input
 
 ## Requirements
 
@@ -25,21 +26,21 @@ The LLM becomes a code generator. Any task you request, the agent solves by writ
 ## Installation
 
 ```bash
-# Clone and install
-git clone https://github.com/cadu/caducode
+# Clone and install as a tool
+git clone https://github.com/flipbit03/caducode
 cd caducode
-uv pip install -e .
+uv tool install .
 ```
 
 ## Usage
 
-### Interactive REPL
+### Interactive TUI (default)
 
 ```bash
 caducode
 ```
 
-This starts an interactive session where you can chat with the agent.
+Starts the full Textual TUI with scrollable message history, fixed input bar, and resize support.
 
 ### Single Prompt
 
@@ -47,15 +48,18 @@ This starts an interactive session where you can chat with the agent.
 caducode "list all Python files in this directory"
 ```
 
-Run a single prompt and exit.
+Run a single prompt and exit (uses Rich CLI mode).
 
 ### Options
 
 ```
---api-url TEXT     Ollama API URL (default: http://cadumac:11434)
---model TEXT       Model to use (default: qwen3-coder:30b)
---debug            Enable debug output (tool calls, code, etc.)
---no-timestamp     Disable timestamps on messages
+--api-url TEXT       Ollama API URL (default: http://cadumac:11434)
+--model TEXT         Model to use (default: qwen3-coder:30b)
+--debug              Enable debug output
+--show-code-results  Show code execution results in TUI
+--no-tui             Use simple Rich CLI instead of TUI
+--no-code            Hide generated code (Rich CLI only)
+--no-timestamp       Disable timestamps (Rich CLI only)
 ```
 
 ## How It Works
@@ -74,9 +78,10 @@ Inside the code, one special function is available:
 
 - **Python**: 3.14
 - **Package Manager**: uv
-- **Framework**: PydanticAI
+- **Agent Framework**: PydanticAI
 - **LLM Provider**: Ollama (via OpenAI-compatible API)
-- **UI**: Rich (colored terminal output)
+- **TUI**: Textual
+- **Rich CLI**: Rich
 
 ## License
 
