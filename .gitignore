@@ -57,5 +57,6 @@ Thumbs.db
 # Claude
 .claude/
 
-# Screenshots
-screenshots/
+# Screenshots (keep caducode.png for README)
+screenshots/*
+!screenshots/caducode.png

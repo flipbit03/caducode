@@ -8,6 +8,8 @@ Instead of providing 20+ specialized tools (read_file, write_file, grep, list_di
 
 The LLM becomes a code generator. Any task you request, the agent solves by writing Python code. If Python can do it, the agent can do it.
 
+![CaduCode TUI](screenshots/caducode.png)
+
 ## Features
 
 - **Single tool simplicity**: One `run_python` tool handles everything
