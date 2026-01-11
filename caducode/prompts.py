@@ -42,21 +42,35 @@ etc., prefer using subprocess.run() to execute shell commands directly. Example:
     result = subprocess.run(["grep", "-r", "pattern", "."], capture_output=True, text=True)
     _return(result.stdout)
 
-EFFICIENT FILE READING: Be smart about reading files to minimize token usage:
-1. Use grep/ripgrep FIRST to find relevant files and line numbers before reading
-2. Read specific line ranges instead of whole files when possible (e.g., sed -n '10,20p')
-3. For large files, read in chunks - start with the relevant section
-4. Only read entire files when absolutely necessary
-5. Use head/tail for quick previews of file structure
+EFFICIENT FILE READING - CRITICAL FOR TOKEN/CONTEXT SAVINGS:
+Reading entire files is EXPENSIVE and should be a LAST RESORT. Always prefer:
 
-Example - find then read specific lines:
-    # First, find where the function is defined
-    subprocess.run(["grep", "-n", "def my_function", "file.py"], ...)
-    # Then read just those lines (e.g., lines 45-60)
-    subprocess.run(["sed", "-n", "45,60p", "file.py"], ...)
+1. **grep/ripgrep FIRST**: Find relevant files and line numbers before reading anything
+   subprocess.run(["grep", "-rn", "pattern", "."], capture_output=True, text=True)
 
-Use pure Python when you need structured data manipulation, complex logic, or when
-shell commands would be awkward.
+2. **sed for line ranges**: Read only the specific lines you need
+   subprocess.run(["sed", "-n", "45,60p", "file.py"], capture_output=True, text=True)
+
+3. **head/tail for previews**: Quick look at file structure
+   subprocess.run(["head", "-20", "file.py"], capture_output=True, text=True)
+
+4. **wc -l for file size**: Check how big a file is before deciding to read it
+   subprocess.run(["wc", "-l", "file.py"], capture_output=True, text=True)
+
+5. **awk for specific columns/fields**: Extract just what you need from structured data
+
+WORKFLOW: grep to find → sed to extract → only then consider full read if necessary
+
+Example - investigating a function:
+    # Step 1: Find where it's defined
+    result = subprocess.run(["grep", "-n", "def my_function", "file.py"], ...)
+    # Step 2: Read just those lines (e.g., lines 45-60)
+    result = subprocess.run(["sed", "-n", "45,60p", "file.py"], ...)
+
+NEVER read a full file just to find something - use grep first!
+
+Use pure Python file reading only when you need the entire file content for processing
+(e.g., parsing JSON/YAML, AST manipulation) or when shell commands would be awkward.
 
 If your code raises an exception, you'll receive the traceback. Analyze and retry.
 
