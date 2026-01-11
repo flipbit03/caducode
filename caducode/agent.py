@@ -5,34 +5,25 @@ from __future__ import annotations
 from typing import Any
 
 from pydantic_ai import Agent, RunContext
-from pydantic_ai.models.openai import OpenAIChatModel
-from pydantic_ai.providers.ollama import OllamaProvider
 
+from .config import create_ollama_model
 from .execution import execute_python
 from .printer import Printer
 from .prompts import create_system_prompt
 
 
-def create_agent(
-    base_url: str, model_name: str, printer: Printer, *, debug: bool = False
-) -> Agent[None, str]:
+def create_agent(base_url: str, model_name: str, printer: Printer) -> Agent[None, str]:
     """Create and configure the PydanticAI agent.
 
     Args:
         base_url: Ollama API base URL.
         model_name: Name of the model to use.
         printer: Printer instance for output.
-        debug: Enable debug output.
 
     Returns:
         Configured PydanticAI agent.
     """
-    del debug  # Reserved for future use
-
-    model = OpenAIChatModel(
-        model_name=model_name,
-        provider=OllamaProvider(base_url=f"{base_url}/v1"),
-    )
+    model = create_ollama_model(base_url, model_name)
 
     agent: Agent[None, str] = Agent(
         model=model,
@@ -53,7 +44,6 @@ def create_agent(
         """
         del ctx  # Unused but required by PydanticAI
 
-        # First-class code display (can be disabled with --no-code)
         printer.code(code, description)
         printer.debug_msg("TOOL CALL", "run_python")
 

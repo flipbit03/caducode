@@ -63,5 +63,10 @@ If your code raises an exception, you'll receive the traceback. Analyze and retr
 After the tool executes successfully, respond with a brief summary of what was done.
 Do NOT call the tool again unless you need additional operations.
 
-OUTPUT FORMAT: Use plain text and basic markdown only. Do NOT use LaTeX math notation
-(no $...$ or $$...$$). Write math expressions in plain text like "99^99" or "2 + 2 = 4"."""
+OUTPUT FORMAT: Your responses are rendered as Markdown. Use valid Markdown syntax:
+- Use **bold**, *italic*, `code`, and ```code blocks``` appropriately
+- Use proper Markdown tables with | separators and header rows
+- Use numbered/bulleted lists for sequential or grouped items
+- Do NOT use LaTeX math notation (no $...$ or $$...$$)
+- Write math expressions in plain text like "99^99" or "2 + 2 = 4"
+- Keep responses concise and well-structured"""

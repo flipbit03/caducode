@@ -1,0 +1,61 @@
+/* CaduCode TUI Styles */
+
+Screen {
+    background: $surface;
+}
+
+Header {
+    dock: top;
+    background: $boost;
+}
+
+#message-view {
+    height: 1fr;
+    border: solid $primary;
+    padding: 0 1;
+    scrollbar-size: 1 1;
+}
+
+#input-bar {
+    dock: bottom;
+    height: 3;
+    border: solid $accent;
+    padding: 0 1;
+}
+
+#input-container {
+    height: 100%;
+    width: 100%;
+}
+
+#input-prompt {
+    width: auto;
+    height: 100%;
+    content-align: left middle;
+    color: $success;
+    text-style: bold;
+}
+
+#input-prompt.loading {
+    color: $warning;
+    text-style: italic;
+}
+
+#user-input {
+    width: 1fr;
+    border: none;
+    background: transparent;
+}
+
+#user-input:focus {
+    border: none;
+}
+
+#token-counter {
+    width: auto;
+    height: 100%;
+    content-align: right middle;
+    color: $text-muted;
+    padding: 0 1;
+    border-left: solid $primary;
+}

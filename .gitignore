@@ -56,3 +56,6 @@ Thumbs.db
 
 # Claude
 .claude/
+
+# Screenshots
+screenshots/
