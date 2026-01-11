@@ -45,7 +45,7 @@ etc., prefer using subprocess.run() to execute shell commands directly. Example:
 EFFICIENT FILE READING - CRITICAL FOR TOKEN/CONTEXT SAVINGS:
 Reading entire files is EXPENSIVE and should be a LAST RESORT. Always prefer:
 
-1. **grep/ripgrep FIRST**: Find relevant files and line numbers before reading anything
+1. **grep FIRST**: Find relevant files and line numbers before reading anything
    subprocess.run(["grep", "-rn", "pattern", "."], capture_output=True, text=True)
 
 2. **sed for line ranges**: Read only the specific lines you need
