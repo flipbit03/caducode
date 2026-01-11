@@ -53,9 +53,9 @@ def create_agent(
         """
         del ctx  # Unused but required by PydanticAI
 
-        printer.action(description)
+        # First-class code display (can be disabled with --no-code)
+        printer.code(code, description)
         printer.debug_msg("TOOL CALL", "run_python")
-        printer.debug_code(code)
 
         return execute_python(code, printer)
 

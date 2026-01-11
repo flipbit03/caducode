@@ -51,17 +51,23 @@ async def main(
     default=DEFAULT_MODEL,
     help=f"Model to use (default: {DEFAULT_MODEL})",
 )
-@click.option("--debug", is_flag=True, help="Enable debug output (tool calls, code, etc.)")
+@click.option("--debug", is_flag=True, help="Enable debug output (tool calls, results, etc.)")
+@click.option("--no-code", is_flag=True, help="Hide generated code (shown by default)")
 @click.option("--no-timestamp", is_flag=True, help="Disable timestamps on messages")
 def cli(
-    prompt: str | None, api_url: str, model: str, debug: bool, no_timestamp: bool
+    prompt: str | None,
+    api_url: str,
+    model: str,
+    debug: bool,
+    no_code: bool,
+    no_timestamp: bool,
 ) -> None:
     """CaduCode - Minimalist coding agent with a single run_python tool.
 
     If PROMPT is provided, runs that prompt and exits.
     Otherwise, starts an interactive REPL.
     """
-    printer = Printer(show_timestamps=not no_timestamp, debug=debug)
+    printer = Printer(show_timestamps=not no_timestamp, show_code=not no_code, debug=debug)
 
     # Validate model exists on the server
     validate_model(api_url, model)

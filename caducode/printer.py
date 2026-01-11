@@ -5,8 +5,12 @@ from __future__ import annotations
 from datetime import datetime
 from typing import TYPE_CHECKING
 
-from rich.console import Console
+from rich.console import Console, Group
+from rich.live import Live
 from rich.markdown import Markdown
+from rich.panel import Panel
+from rich.syntax import Syntax
+from rich.text import Text
 
 if TYPE_CHECKING:
     from pydantic_ai.usage import RunUsage
@@ -15,12 +19,20 @@ console = Console()
 
 
 class Printer:
-    """Centralized printer with timestamps and debug control."""
+    """Centralized printer with timestamps, code display, and debug control."""
 
-    def __init__(self, *, show_timestamps: bool = True, debug: bool = False) -> None:
+    def __init__(
+        self,
+        *,
+        show_timestamps: bool = True,
+        show_code: bool = True,
+        debug: bool = False,
+    ) -> None:
         self.show_timestamps = show_timestamps
+        self.show_code = show_code
         self.debug = debug
         self.total_tokens = 0
+        self._live: Live | None = None
 
     def _format_tokens(self, n: int) -> str:
         """Format token count as fixed-width 5 chars (e.g., '001.2k')."""
@@ -60,6 +72,41 @@ class Printer:
     def error(self, message: str) -> None:
         """Print error message."""
         console.print(f"{self._prefix()}[bold red]Error:[/bold red] {message}")
+
+    def code(self, code: str, description: str) -> None:
+        """Display generated code with syntax highlighting.
+
+        This is first-class display for the agent's only tool.
+        Shows a panel with the code description and syntax-highlighted Python.
+        """
+        if not self.show_code:
+            return
+
+        # Create header with action description
+        header = Text()
+        header.append("● ", style="bold yellow")
+        header.append(description, style="italic yellow")
+
+        # Syntax-highlighted Python code
+        syntax = Syntax(
+            code,
+            "python",
+            theme="monokai",
+            line_numbers=True,
+            word_wrap=True,
+        )
+
+        # Combine into a panel
+        panel = Panel(
+            Group(header, Text(""), syntax),
+            title="[bold cyan]Agent Code[/bold cyan]",
+            border_style="cyan",
+            padding=(0, 1),
+        )
+
+        # Use Live for proper terminal resize handling
+        with Live(panel, console=console, refresh_per_second=4, transient=False):
+            pass  # Panel is displayed and properly handles terminal resize
 
     def debug_msg(self, label: str, message: str) -> None:
         """Print debug message (only if debug mode is enabled)."""

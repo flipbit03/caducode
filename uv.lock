@@ -203,8 +203,8 @@ wheels = [
 ]
 
 [[package]]
-name = "caduagent"
-version = "0.2.2"
+name = "caducode"
+version = "0.3.0"
 source = { editable = "." }
 dependencies = [
     { name = "click" },
